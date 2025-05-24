@@ -7,30 +7,25 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up JDK
+      - name: Set up Java
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '11'
 
-      - name: Grant permission to Gradle
+      - name: Give gradlew permission
         run: chmod +x ./gradlew
 
       - name: Build APK
         run: ./gradlew assembleDebug
 
-      - name: Upload Debug APK
-        run: |
-          mkdir -p upload
-          cp app/build/outputs/apk/debug/app-debug.apk upload/
-        shell: bash
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
           name: WearGPT-APK
-          path: upload/app-debug.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
